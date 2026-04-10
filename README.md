@@ -115,7 +115,7 @@ Invalid:
 
 ## Contributors
 
-Samuel Estifanos 
+Samuel Estifanos, 
 James Lapenna 
 
 ---
