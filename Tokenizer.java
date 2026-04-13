@@ -11,7 +11,6 @@ public class Tokenizer extends Token{
     //check if int is within input
 
     
-Token token = new Token();
 
 
 

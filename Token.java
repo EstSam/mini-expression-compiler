@@ -1,10 +1,23 @@
 //Defines token objects
 public class Token{
 
-    private final  Type;
+    
     private final String value;
+    private final Tokens type;
 
-//TODO: Create constructor for Token class(Getter and setters);
+    public Token(String value, Tokens type) {
+        this.value = value;
+        this.type = type;
+    }
+    
+    public String getValue() {
+        return value;
+    }
+
+    public Tokens getType() {
+        return type;
+    }
+    
 
     public enum Tokens{
         Symbol,
