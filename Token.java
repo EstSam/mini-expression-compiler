@@ -17,7 +17,9 @@ public class Token{
     public Tokens getType() {
         return type;
     }
-    
+    public String toString(){
+        return value;
+    }
 
     public enum Tokens{
         Symbol,
