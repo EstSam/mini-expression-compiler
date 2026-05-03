@@ -11,12 +11,13 @@ public class Main {
 
         try {
             // Step 1: Tokenize
-            List<Token> tokens = Tokenizer.tokenize(input);
+            Tokenizer tokenizer = new Tokenizer(input);
+            List<Token> tokens = tokenizer.tokenize();
             System.out.println("Tokens: " + tokens);
 
             // Step 2: Parse
             Parser parser = new Parser(tokens);
-            Node tree = parser.parse();
+            Node tree = parser.parseExpression();
             System.out.println("Parse: SUCCESS");
 
             // Step 3: Evaluate

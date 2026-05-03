@@ -5,7 +5,7 @@ public class Token{
     private final String value;
     private final Tokens type;
 
-    public Token(String value, Tokens type) {
+    public Token(Tokens type,String value) {
         this.value = value;
         this.type = type;
     }
@@ -22,12 +22,10 @@ public class Token{
     }
 
     public enum Tokens{
-        Symbol,
-        Keywords,
-        Identifier,
-        Constants,
-        Operators
-        ,Seperators
+        NUMBER,
+        OPERATOR,
+        LPAREN,
+        RPAREN
 
     }
     
