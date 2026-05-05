@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Node {
     String value;
     Node left, right;
@@ -14,47 +12,25 @@ public class Node {
         this.right = right;
     }
 
+    // CLEAN, STABLE TREE (sideways)
     public static void printTree(Node root) {
-        int height = height(root);
-        int width = (int) Math.pow(2, height) * 2;
-
-        List<List<String>> canvas = new ArrayList<>();
-
-        for (int i = 0; i < height * 2; i++) {
-            List<String> row = new ArrayList<>(Collections.nCopies(width, " "));
-            canvas.add(row);
-        }
-
-        fill(canvas, root, 0, width / 2, height);
-
-        for (List<String> row : canvas) {
-            String line = String.join("", row).replaceAll("\\s+$", "");
-            if (!line.trim().isEmpty()) {
-                System.out.println(line);
-            }
-        }
+        print(root, "", true);
     }
 
-    private static void fill(List<List<String>> canvas, Node node, int row, int col, int height) {
+    private static void print(Node node, String prefix, boolean isTail) {
         if (node == null) return;
 
-        canvas.get(row).set(col, node.value);
-
-        int gap = (int) Math.pow(2, height - row / 2 - 2);
-
-        if (node.left != null) {
-            canvas.get(row + 1).set(col - gap / 2, "/");
-            fill(canvas, node.left, row + 2, col - gap, height);
-        }
-
+        // print right subtree first (so it appears on top)
         if (node.right != null) {
-            canvas.get(row + 1).set(col + gap / 2, "\\");
-            fill(canvas, node.right, row + 2, col + gap, height);
+            print(node.right, prefix + (isTail ? "│   " : "    "), false);
         }
-    }
 
-    private static int height(Node node) {
-        if (node == null) return 0;
-        return 1 + Math.max(height(node.left), height(node.right));
+        // print current node
+        System.out.println(prefix + (isTail ? "└── " : "┌── ") + node.value);
+
+        // print left subtree
+        if (node.left != null) {
+            print(node.left, prefix + (isTail ? "    " : "│   "), true);
+        }
     }
 }
