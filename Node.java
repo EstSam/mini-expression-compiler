@@ -14,25 +14,24 @@ public class Node {
         this.right = right;
     }
 
-    // 🔥 CLEAN TOP-DOWN TREE
     public static void printTree(Node root) {
-        int height = getHeight(root);
-        int maxWidth = (int) Math.pow(2, height) - 1;
+        int h = height(root);
+        int maxWidth = (int) Math.pow(2, h) - 1;
 
         List<Node> level = new ArrayList<>();
         level.add(root);
 
-        for (int i = 1; i <= height; i++) {
+        for (int i = 0; i < h; i++) {
+            int floor = h - i - 1;
+            int edgeLines = (int) Math.pow(2, Math.max(floor - 1, 0));
+            int firstSpaces = (int) Math.pow(2, floor) - 1;
+            int betweenSpaces = (int) Math.pow(2, floor + 1) - 1;
 
-            int spaces = (int) Math.pow(2, height - i) - 1;
-            int between = (int) Math.pow(2, height - i + 1) - 1;
-
-            printSpaces(spaces);
+            printSpaces(firstSpaces);
 
             List<Node> next = new ArrayList<>();
 
             for (Node node : level) {
-
                 if (node != null) {
                     System.out.print(node.value);
                     next.add(node.left);
@@ -42,23 +41,28 @@ public class Node {
                     next.add(null);
                     next.add(null);
                 }
-
-                printSpaces(between);
+                printSpaces(betweenSpaces);
             }
-
             System.out.println();
 
-            if (i < height) {
-                printSpaces(spaces - 1);
+            for (int j = 1; j <= edgeLines; j++) {
+                for (int k = 0; k < level.size(); k++) {
+                    printSpaces(firstSpaces - j);
 
-                for (Node node : level) {
-                    if (node == null) {
-                        System.out.print("  ");
-                    } else {
-                        System.out.print((node.left != null ? "/" : " "));
-                        System.out.print((node.right != null ? "\\" : " "));
+                    if (level.get(k) == null) {
+                        printSpaces(edgeLines * 2 + j + 1);
+                        continue;
                     }
-                    printSpaces(between - 1);
+
+                    if (level.get(k).left != null) System.out.print("/");
+                    else printSpaces(1);
+
+                    printSpaces(j * 2 - 1);
+
+                    if (level.get(k).right != null) System.out.print("\\");
+                    else printSpaces(1);
+
+                    printSpaces(edgeLines * 2 - j);
                 }
                 System.out.println();
             }
@@ -67,14 +71,12 @@ public class Node {
         }
     }
 
-    private static int getHeight(Node node) {
+    private static int height(Node node) {
         if (node == null) return 0;
-        return 1 + Math.max(getHeight(node.left), getHeight(node.right));
+        return 1 + Math.max(height(node.left), height(node.right));
     }
 
-    private static void printSpaces(int count) {
-        for (int i = 0; i < count; i++) {
-            System.out.print(" ");
-        }
+    private static void printSpaces(int n) {
+        for (int i = 0; i < n; i++) System.out.print(" ");
     }
 }
