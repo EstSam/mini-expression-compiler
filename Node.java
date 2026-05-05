@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Node {
     String value;
     Node left, right;
@@ -14,69 +12,43 @@ public class Node {
         this.right = right;
     }
 
+    // 🔥 PRINT EXACT STYLE TREE
     public static void printTree(Node root) {
         int height = getHeight(root);
+        printNode(root, 0, height);
+    }
 
-        List<Node> current = new ArrayList<>();
-        current.add(root);
+    private static void printNode(Node node, int level, int height) {
+        if (node == null) return;
 
-        int spacing = (int) Math.pow(2, height);
+        int indent = (int) Math.pow(2, height - level);
 
-        while (!allNull(current)) {
+        // print current node
+        printSpaces(indent);
+        System.out.println(node.value);
 
-            // print node values
-            List<Node> next = new ArrayList<>();
-
-            for (Node node : current) {
-                printSpaces(spacing / 2);
-
-                if (node != null) {
-                    System.out.print(node.value);
-                    next.add(node.left);
-                    next.add(node.right);
-                } else {
-                    System.out.print(" ");
-                    next.add(null);
-                    next.add(null);
-                }
-
-                printSpaces(spacing / 2);
-            }
-            System.out.println();
+        if (node.left != null || node.right != null) {
 
             // print connectors
-            for (Node node : current) {
-                printSpaces(spacing / 2);
+            printSpaces(indent - 1);
+            System.out.print("/");
+            printSpaces(1);
+            System.out.println("\\");
 
-                if (node != null && node.left != null) System.out.print("/");
-                else System.out.print(" ");
-
-                printSpaces(spacing - 1);
-
-                if (node != null && node.right != null) System.out.print("\\");
-                else System.out.print(" ");
-
-                printSpaces(spacing / 2);
-            }
-            System.out.println();
-
-            spacing /= 2;
-            current = next;
+            // recursive children
+            printNode(node.left, level + 1, height);
+            printNode(node.right, level + 1, height);
         }
     }
 
-    // helpers
     private static int getHeight(Node node) {
         if (node == null) return 0;
         return 1 + Math.max(getHeight(node.left), getHeight(node.right));
     }
 
-    private static boolean allNull(List<Node> list) {
-        for (Node n : list) if (n != null) return false;
-        return true;
-    }
-
     private static void printSpaces(int n) {
-        for (int i = 0; i < n; i++) System.out.print(" ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(" ");
+        }
     }
 }
