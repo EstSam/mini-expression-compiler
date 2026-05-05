@@ -51,30 +51,49 @@ public class Parser {
         return node;
     }
 
-    private Node parseFactor() {
+   private Node parseFactor() {
         Token token = current();
 
         if (token == null) {
-            throw new RuntimeException("Unexpected end of input");
-        }
-
-        if (token.getType() == Token.Type.NUMBER) {
-            eat();
-            return new Node(token.getValue());
-        }
-
-        if (token.getType() == Token.Type.LPAREN) {
-            eat();
-            Node node = parseExpression();
-
-            if (current() == null || current().getType() != Token.Type.RPAREN) {
-                throw new RuntimeException("Missing closing parenthesis");
-            }
-
-            eat();
-            return node;
-        }
-
-        throw new RuntimeException("Unexpected token: " + token.getValue());
+        throw new RuntimeException("Unexpected end of input");
     }
+
+        if (token.getType() == Token.Type.OPERATOR &&
+        (token.getValue().equals("+") || token.getValue().equals("-"))) {
+
+        String op = token.getValue();
+        eat();
+
+        Node factor = parseFactor(); // recursive
+
+        // treat -x as (0 - x)
+        if (op.equals("-")) {
+            return new Node("-", new Node("0"), factor);
+        }
+
+        // +x just returns x
+        return factor;
+    }
+
+    // NUMBER
+    if (token.getType() == Token.Type.NUMBER) {
+        eat();
+        return new Node(token.getValue());
+    }
+
+    // (E)
+    if (token.getType() == Token.Type.LPAREN) {
+        eat();
+        Node node = parseExpression();
+
+        if (current() == null || current().getType() != Token.Type.RPAREN) {
+            throw new RuntimeException("Missing closing parenthesis");
+        }
+
+        eat();
+        return node;
+    }
+
+    throw new RuntimeException("Unexpected token: " + token.getValue());
+}
 }
