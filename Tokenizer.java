@@ -33,12 +33,12 @@ private void Move(){
 
 }
 
-private String Read(){
+private String Read() {
     StringBuilder build = new StringBuilder();
     int count = 0;
 
-    while(Char != '\0' && (Character.isDigit(Char) || Char == '.'))
-        if(Char == '.'){
+    while (Char != '\0' && (Character.isDigit(Char) || Char == '.')) {
+        if (Char == '.') {
             count++;
         }
         build.append(Char);
@@ -55,37 +55,40 @@ private String Read(){
 
 
 public List<Token> tokenize(){
-        List<Token> tokens = new ArrayList<>();
+    List<Token> tokens = new ArrayList<>();
 
-        while(Char!='\0'){
+    while(Char != '\0'){
 
         if(Character.isWhitespace(Char)){
-             Move();
-             continue;
+            Move();
+            continue;
         }
-           else if(Character.isDigit(Char)){
-                tokens.add(new Token(Token.Tokens.NUMBER,Read()));
-                continue;
-            }
-            else if(Char=='+'||Char =='-'||Char=='*'||Char=='/'){
-                tokens.add(new Token(Token.Tokens.OPERATOR,String.valueOf(Char)));
-                Move();
-                continue;
-            }
-            else if(Char=='('){
-                tokens.add(new Token(Token.Tokens.LPAREN, "("));
-                Move();
-                continue;
-            }
-            if(Char==')'){
-                tokens.add(new Token(Token.Tokens.RPAREN, ")"));
-                Move();
-                continue;
-            }
-
+        else if(Character.isDigit(Char)){
+            tokens.add(new Token(Token.Tokens.NUMBER, Read()));
+            continue;
         }
-        return tokens;
+        else if(Char=='+' || Char=='-' || Char=='*' || Char=='/'){
+            tokens.add(new Token(Token.Tokens.OPERATOR, String.valueOf(Char)));
+            Move();
+            continue;
+        }
+        else if(Char=='('){
+            tokens.add(new Token(Token.Tokens.LPAREN, "("));
+            Move();
+            continue;
+        }
+        else if(Char==')'){
+            tokens.add(new Token(Token.Tokens.RPAREN, ")"));
+            Move();
+            continue;
+        }
+        else {
+            throw new RuntimeException("Invalid character: " + Char);
+        }
     }
+
+    return tokens;
+}
 
 }
 
