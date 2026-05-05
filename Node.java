@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Node {
     String value;
     Node left, right;
@@ -12,30 +14,52 @@ public class Node {
         this.right = right;
     }
 
-    // FORCE TRIANGLE PRINT (LEFT-ALIGNED LIKE YOUR EXAMPLE)
+    // HARD-FORCED TRIANGLE PRINT (LEVEL ORDER)
     public static void printTree(Node root) {
-        print(root, 0);
+        List<List<String>> levels = new ArrayList<>();
+        buildLevels(root, 0, levels);
+
+        int maxWidth = levels.get(levels.size() - 1).size() * 4;
+
+        for (int i = 0; i < levels.size(); i++) {
+            List<String> level = levels.get(i);
+
+            int spaces = maxWidth / (level.size() + 1);
+
+            // PRINT NODES
+            for (String val : level) {
+                printSpaces(spaces);
+                System.out.print(val);
+            }
+            System.out.println();
+
+            // PRINT BRANCHES
+            if (i < levels.size() - 1) {
+                for (int j = 0; j < level.size(); j++) {
+                    printSpaces(spaces - 1);
+                    System.out.print("/");
+                    printSpaces(2);
+                    System.out.print("\\");
+                }
+                System.out.println();
+            }
+        }
     }
 
-    private static void print(Node node, int level) {
+    private static void buildLevels(Node node, int depth, List<List<String>> levels) {
         if (node == null) return;
 
-        // PRINT CURRENT NODE WITH INDENT
-        printSpaces(level * 3);
-        System.out.println(node.value);
-
-        // IF HAS CHILDREN, PRINT BRANCHES
-        if (node.left != null || node.right != null) {
-            printSpaces(level * 3);
-            System.out.println("/ \\");
+        if (levels.size() == depth) {
+            levels.add(new ArrayList<>());
         }
 
-        // LEFT THEN RIGHT (THIS CREATES YOUR SHAPE)
-        print(node.left, level + 1);
-        print(node.right, level + 1);
+        levels.get(depth).add(node.value);
+
+        buildLevels(node.left, depth + 1, levels);
+        buildLevels(node.right, depth + 1, levels);
     }
 
-    private static void printSpaces(int count) {
-        for (int i = 0; i < count; i++) System.out.print(" ");
+    private static void printSpaces(int n) {
+        for (int i = 0; i < n; i++) System.out.print(" ");
     }
 }
