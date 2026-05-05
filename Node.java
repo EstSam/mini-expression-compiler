@@ -14,69 +14,28 @@ public class Node {
         this.right = right;
     }
 
-    // PRINT TREE CLEANLY (LEVEL BY LEVEL)
+    // CLEAN SIDEWAYS TREE (LOOKS GOOD + WORKS EVERY TIME)
     public static void printTree(Node root) {
-        int height = height(root);
-        int maxWidth = (int) Math.pow(2, height);
+        print(root, 0);
+    }
 
-        List<Node> currentLevel = new ArrayList<>();
-        currentLevel.add(root);
+    private static void print(Node node, int space) {
+        if (node == null) return;
 
-        for (int level = 0; level < height; level++) {
-            int spaces = (int) Math.pow(2, height - level - 1);
+        int COUNT = 6; // spacing (adjust if needed)
+        space += COUNT;
 
-            List<Node> nextLevel = new ArrayList<>();
+        // RIGHT CHILD
+        print(node.right, space);
 
-            // PRINT NODES
-            for (Node node : currentLevel) {
-                printSpaces(spaces);
-
-                if (node != null) {
-                    System.out.print(node.value);
-                    nextLevel.add(node.left);
-                    nextLevel.add(node.right);
-                } else {
-                    System.out.print(" ");
-                    nextLevel.add(null);
-                    nextLevel.add(null);
-                }
-
-                printSpaces(spaces);
-            }
-            System.out.println();
-
-            // PRINT EDGES
-            if (level < height - 1) {
-                for (Node node : currentLevel) {
-                    printSpaces(spaces - 1);
-
-                    if (node != null && node.left != null)
-                        System.out.print("/");
-                    else
-                        System.out.print(" ");
-
-                    printSpaces(1);
-
-                    if (node != null && node.right != null)
-                        System.out.print("\\");
-                    else
-                        System.out.print(" ");
-
-                    printSpaces(spaces - 1);
-                }
-                System.out.println();
-            }
-
-            currentLevel = nextLevel;
+        // CURRENT NODE
+        System.out.println();
+        for (int i = COUNT; i < space; i++) {
+            System.out.print(" ");
         }
-    }
+        System.out.println(node.value);
 
-    private static int height(Node node) {
-        if (node == null) return 0;
-        return 1 + Math.max(height(node.left), height(node.right));
-    }
-
-    private static void printSpaces(int count) {
-        for (int i = 0; i < count; i++) System.out.print(" ");
+        // LEFT CHILD
+        print(node.left, space);
     }
 }
