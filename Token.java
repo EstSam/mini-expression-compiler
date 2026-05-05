@@ -1,32 +1,26 @@
-//Defines token objects
-public class Token{
+public class Token {
 
-    
-    private final String value;
-    private final Tokens type;
-
-    public Token(Tokens type,String value) {
-        this.value = value;
-        this.type = type;
+    public enum Type {
+        NUMBER, OPERATOR, LPAREN, RPAREN
     }
-    
+
+    private final String value;
+    private final Type type;
+
+    public Token(Type type, String value) {
+        this.type = type;
+        this.value = value;
+    }
+
     public String getValue() {
         return value;
     }
 
-    public Tokens getType() {
+    public Type getType() {
         return type;
     }
-    public String toString(){
+
+    public String toString() {
         return value;
     }
-
-    public enum Tokens{
-        NUMBER,
-        OPERATOR,
-        LPAREN,
-        RPAREN
-
-    }
-    
-    }
+}
