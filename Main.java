@@ -19,8 +19,8 @@ public class Main {
 
             System.out.println("------------------");
             System.out.println("Parse Tree:");
-            Node.printTree(tree, "", true);
-
+            Node.printTree(tree);
+            
             int result = Evaluator.evaluate(tree);
             System.out.println("Result: " + result);
 
