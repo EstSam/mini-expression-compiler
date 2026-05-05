@@ -20,7 +20,14 @@ public class Main {
             Node tree = parser.parseExpression();
             System.out.println("Parse: SUCCESS");
 
-            // Step 3: Evaluate
+            // Clean separator
+            System.out.println("------------------");
+
+            // Step 3: Print AST (Parse Tree)
+            System.out.println("Parse Tree:");
+            Node.printTree(tree, "");
+
+            // Step 4: Evaluate
             int result = Evaluator.evaluate(tree);
             System.out.println("Result: " + result);
 
