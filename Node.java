@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Node {
     String value;
     Node left, right;
@@ -14,27 +12,30 @@ public class Node {
         this.right = right;
     }
 
+    // FORCE TRIANGLE PRINT (LEFT-ALIGNED LIKE YOUR EXAMPLE)
     public static void printTree(Node root) {
         print(root, 0);
     }
 
-    private static void print(Node node, int space) {
+    private static void print(Node node, int level) {
         if (node == null) return;
 
-        int COUNT = 6; // spacing (adjust if needed)
-        space += COUNT;
-
-        // RIGHT CHILD
-        print(node.right, space);
-
-        // CURRENT NODE
-        System.out.println();
-        for (int i = COUNT; i < space; i++) {
-            System.out.print(" ");
-        }
+        // PRINT CURRENT NODE WITH INDENT
+        printSpaces(level * 3);
         System.out.println(node.value);
 
-        // LEFT CHILD
-        print(node.left, space);
+        // IF HAS CHILDREN, PRINT BRANCHES
+        if (node.left != null || node.right != null) {
+            printSpaces(level * 3);
+            System.out.println("/ \\");
+        }
+
+        // LEFT THEN RIGHT (THIS CREATES YOUR SHAPE)
+        print(node.left, level + 1);
+        print(node.right, level + 1);
+    }
+
+    private static void printSpaces(int count) {
+        for (int i = 0; i < count; i++) System.out.print(" ");
     }
 }
