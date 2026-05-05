@@ -1,6 +1,7 @@
 public class Evaluator {
 
     public static int evaluate(Node node) {
+
         if (node.left == null && node.right == null) {
             return Integer.parseInt(node.value);
         }
