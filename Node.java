@@ -14,7 +14,6 @@ public class Node {
         this.right = right;
     }
 
-    // 🔥 CLEAN TRIANGLE PRINT (FIXED ALIGNMENT)
     public static void printTree(Node root) {
         int height = height(root);
         int width = (int) Math.pow(2, height) * 2;
