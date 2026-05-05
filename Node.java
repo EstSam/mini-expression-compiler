@@ -12,7 +12,6 @@ public class Node {
         this.right = right;
     }
 
-    // 🔥 Proper binary tree display
     public static void printTree(Node node, String indent, boolean isRight) {
         if (node == null) return;
 
