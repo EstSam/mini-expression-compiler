@@ -14,68 +14,48 @@ public class Node {
         this.right = right;
     }
 
-   public static void printTree(Node root) {
-    List<List<Node>> levels = new ArrayList<>();
-    buildLevels(root, 0, levels);
+    // 🔥 CLEAN TRIANGLE PRINT (FIXED ALIGNMENT)
+    public static void printTree(Node root) {
+        int height = height(root);
+        int width = (int) Math.pow(2, height) * 2;
 
-    int spacing = 6; 
+        List<List<String>> canvas = new ArrayList<>();
 
-    for (int i = 0; i < levels.size(); i++) {
-        List<Node> level = levels.get(i);
-
-        int indent = (levels.size() - i) * spacing;
-
-        // PRINT NODES
-        printSpaces(indent);
-        for (int j = 0; j < level.size(); j++) {
-            Node n = level.get(j);
-            System.out.print(n != null ? n.value : " ");
-
-            printSpaces(spacing * 2 - 1);
+        for (int i = 0; i < height * 2; i++) {
+            List<String> row = new ArrayList<>(Collections.nCopies(width, " "));
+            canvas.add(row);
         }
-        System.out.println();
 
-        // PRINT BRANCHES (ONLY BETWEEN LEVELS)
-        if (i < levels.size() - 1) {
-            printSpaces(indent);
-            for (int j = 0; j < level.size(); j++) {
-                Node n = level.get(j);
+        fill(canvas, root, 0, width / 2, height);
 
-                if (n != null && n.left != null) System.out.print("/");
-                else System.out.print(" ");
-
-                printSpaces(spacing * 2 - 3);
-
-                if (n != null && n.right != null) System.out.print("\\");
-                else System.out.print(" ");
-
-                printSpaces(2);
+        for (List<String> row : canvas) {
+            String line = String.join("", row).replaceAll("\\s+$", "");
+            if (!line.trim().isEmpty()) {
+                System.out.println(line);
             }
-            System.out.println();
         }
     }
-}
 
-private static void buildLevels(Node node, int depth, List<List<Node>> levels) {
-    if (levels.size() == depth) {
-        levels.add(new ArrayList<>());
-    }
+    private static void fill(List<List<String>> canvas, Node node, int row, int col, int height) {
+        if (node == null) return;
 
-    levels.get(depth).add(node);
+        canvas.get(row).set(col, node.value);
 
-    if (node == null) {
-        if (depth + 1 < 6) { // limit depth to avoid explosion
-            buildLevels(null, depth + 1, levels);
-            buildLevels(null, depth + 1, levels);
+        int gap = (int) Math.pow(2, height - row / 2 - 2);
+
+        if (node.left != null) {
+            canvas.get(row + 1).set(col - gap / 2, "/");
+            fill(canvas, node.left, row + 2, col - gap, height);
         }
-        return;
+
+        if (node.right != null) {
+            canvas.get(row + 1).set(col + gap / 2, "\\");
+            fill(canvas, node.right, row + 2, col + gap, height);
+        }
     }
 
-    buildLevels(node.left, depth + 1, levels);
-    buildLevels(node.right, depth + 1, levels);
-}
-
-private static void printSpaces(int n) {
-    for (int i = 0; i < n; i++) System.out.print(" ");
-}
+    private static int height(Node node) {
+        if (node == null) return 0;
+        return 1 + Math.max(height(node.left), height(node.right));
+    }
 }
