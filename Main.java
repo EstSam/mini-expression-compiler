@@ -5,29 +5,22 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-
         System.out.println("Enter an expression:");
         String input = scanner.nextLine();
 
         try {
-            // Step 1: Tokenize
             Tokenizer tokenizer = new Tokenizer(input);
             List<Token> tokens = tokenizer.tokenize();
             System.out.println("Tokens: " + tokens);
 
-            // Step 2: Parse
             Parser parser = new Parser(tokens);
             Node tree = parser.parseExpression();
             System.out.println("Parse: SUCCESS");
 
-            // Clean separator
             System.out.println("------------------");
-
-            // Step 3: Print AST (Parse Tree)
             System.out.println("Parse Tree:");
-            Node.printTree(tree, "");
+            Node.printTree(tree, "", true);
 
-            // Step 4: Evaluate
             int result = Evaluator.evaluate(tree);
             System.out.println("Result: " + result);
 
