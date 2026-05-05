@@ -14,66 +14,65 @@ public class Node {
         this.right = right;
     }
 
-    // HARD-FORCED TRIANGLE PRINT (LEVEL ORDER)
-public static void printTree(Node root) {
-    int h = height(root);
-    int maxWidth = (int) Math.pow(2, h) * 2;
+   public static void printTree(Node root) {
+    List<List<Node>> levels = new ArrayList<>();
+    buildLevels(root, 0, levels);
 
-    List<Node> current = new ArrayList<>();
-    current.add(root);
+    int spacing = 6; 
 
-    for (int level = 0; level < h; level++) {
-        int spaces = maxWidth / (int) Math.pow(2, level + 1);
+    for (int i = 0; i < levels.size(); i++) {
+        List<Node> level = levels.get(i);
 
-        List<Node> next = new ArrayList<>();
+        int indent = (levels.size() - i) * spacing;
 
-        // PRINT VALUES
-        for (Node node : current) {
-            printSpaces(spaces);
+        // PRINT NODES
+        printSpaces(indent);
+        for (int j = 0; j < level.size(); j++) {
+            Node n = level.get(j);
+            System.out.print(n != null ? n.value : " ");
 
-            if (node != null) {
-                System.out.print(node.value);
-                next.add(node.left);
-                next.add(node.right);
-            } else {
-                System.out.print(" ");
-                next.add(null);
-                next.add(null);
-            }
-
-            printSpaces(spaces);
+            printSpaces(spacing * 2 - 1);
         }
         System.out.println();
 
-        // PRINT CONNECTIONS (ONLY ONCE PER NODE)
-        if (level < h - 1) {
-            for (Node node : current) {
-                printSpaces(spaces - 1);
+        // PRINT BRANCHES (ONLY BETWEEN LEVELS)
+        if (i < levels.size() - 1) {
+            printSpaces(indent);
+            for (int j = 0; j < level.size(); j++) {
+                Node n = level.get(j);
 
-                if (node != null && node.left != null)
-                    System.out.print("/");
-                else
-                    System.out.print(" ");
+                if (n != null && n.left != null) System.out.print("/");
+                else System.out.print(" ");
+
+                printSpaces(spacing * 2 - 3);
+
+                if (n != null && n.right != null) System.out.print("\\");
+                else System.out.print(" ");
 
                 printSpaces(2);
-
-                if (node != null && node.right != null)
-                    System.out.print("\\");
-                else
-                    System.out.print(" ");
-
-                printSpaces(spaces - 1);
             }
             System.out.println();
         }
-
-        current = next;
     }
 }
 
-private static int height(Node node) {
-    if (node == null) return 0;
-    return 1 + Math.max(height(node.left), height(node.right));
+private static void buildLevels(Node node, int depth, List<List<Node>> levels) {
+    if (levels.size() == depth) {
+        levels.add(new ArrayList<>());
+    }
+
+    levels.get(depth).add(node);
+
+    if (node == null) {
+        if (depth + 1 < 6) { // limit depth to avoid explosion
+            buildLevels(null, depth + 1, levels);
+            buildLevels(null, depth + 1, levels);
+        }
+        return;
+    }
+
+    buildLevels(node.left, depth + 1, levels);
+    buildLevels(node.right, depth + 1, levels);
 }
 
 private static void printSpaces(int n) {
