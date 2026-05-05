@@ -37,7 +37,7 @@ private String Read(){
     StringBuilder build = new StringBuilder();
     int count = 0;
 
-    while(Char!='\0'&&Character.isDigit(Char)||Char =='.'){
+    while(Char != '\0' && (Character.isDigit(Char) || Char == '.'))
         if(Char == '.'){
             count++;
         }
@@ -65,7 +65,6 @@ public List<Token> tokenize(){
         }
            else if(Character.isDigit(Char)){
                 tokens.add(new Token(Token.Tokens.NUMBER,Read()));
-                Move();
                 continue;
             }
             else if(Char=='+'||Char =='-'||Char=='*'||Char=='/'){
