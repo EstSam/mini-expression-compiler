@@ -14,7 +14,6 @@ public class Node {
         this.right = right;
     }
 
-    // CLEAN SIDEWAYS TREE (LOOKS GOOD + WORKS EVERY TIME)
     public static void printTree(Node root) {
         print(root, 0);
     }
