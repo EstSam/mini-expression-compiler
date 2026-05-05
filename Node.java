@@ -15,68 +15,72 @@ public class Node {
     }
 
     public static void printTree(Node root) {
-        int h = height(root);
-        int maxWidth = (int) Math.pow(2, h) - 1;
+    int height = getHeight(root);
+    int width = (int) Math.pow(2, height) * 2;
 
-        List<Node> level = new ArrayList<>();
-        level.add(root);
+    printLevel(Collections.singletonList(root), 1, height, width);
+    }
 
-        for (int i = 0; i < h; i++) {
-            int floor = h - i - 1;
-            int edgeLines = (int) Math.pow(2, Math.max(floor - 1, 0));
-            int firstSpaces = (int) Math.pow(2, floor) - 1;
-            int betweenSpaces = (int) Math.pow(2, floor + 1) - 1;
+    private static void printLevel(List<Node> nodes, int level, int maxLevel, int width) {
+        if (nodes.isEmpty() || allNull(nodes)) return;
 
-            printSpaces(firstSpaces);
+    int floor = maxLevel - level;
+    int edgeSpace = (int) Math.pow(2, floor);
+    int firstSpace = width / (nodes.size() + 1);
 
-            List<Node> next = new ArrayList<>();
+    List<Node> next = new ArrayList<>();
 
-            for (Node node : level) {
-                if (node != null) {
-                    System.out.print(node.value);
-                    next.add(node.left);
-                    next.add(node.right);
-                } else {
-                    System.out.print(" ");
-                    next.add(null);
-                    next.add(null);
-                }
-                printSpaces(betweenSpaces);
-            }
-            System.out.println();
+    // print node values
+    for (int i = 0; i < nodes.size(); i++) {
+        printSpaces(firstSpace / 2);
 
-            for (int j = 1; j <= edgeLines; j++) {
-                for (int k = 0; k < level.size(); k++) {
-                    printSpaces(firstSpaces - j);
-
-                    if (level.get(k) == null) {
-                        printSpaces(edgeLines * 2 + j + 1);
-                        continue;
-                    }
-
-                    if (level.get(k).left != null) System.out.print("/");
-                    else printSpaces(1);
-
-                    printSpaces(j * 2 - 1);
-
-                    if (level.get(k).right != null) System.out.print("\\");
-                    else printSpaces(1);
-
-                    printSpaces(edgeLines * 2 - j);
-                }
-                System.out.println();
-            }
-
-            level = next;
+        Node n = nodes.get(i);
+        if (n != null) {
+            System.out.print(n.value);
+            next.add(n.left);
+            next.add(n.right);
+        } else {
+            System.out.print(" ");
+            next.add(null);
+            next.add(null);
         }
-    }
 
-    private static int height(Node node) {
-        if (node == null) return 0;
-        return 1 + Math.max(height(node.left), height(node.right));
+        printSpaces(firstSpace / 2);
     }
+    System.out.println();
 
-    private static void printSpaces(int n) {
-        for (int i = 0; i < n; i++) System.out.print(" ");
+    // print connectors
+    for (int i = 0; i < nodes.size(); i++) {
+        Node n = nodes.get(i);
+
+        printSpaces(firstSpace / 2);
+
+        if (n != null && n.left != null) System.out.print("/");
+        else System.out.print(" ");
+
+        printSpaces(firstSpace - 1);
+
+        if (n != null && n.right != null) System.out.print("\\");
+        else System.out.print(" ");
+
+        printSpaces(firstSpace / 2);
     }
+    System.out.println();
+
+    printLevel(next, level + 1, maxLevel, width);
+}
+
+private static int getHeight(Node node) {
+    if (node == null) return 0;
+    return 1 + Math.max(getHeight(node.left), getHeight(node.right));
+}
+
+private static boolean allNull(List<Node> list) {
+    for (Node n : list) if (n != null) return false;
+    return true;
+}
+
+private static void printSpaces(int n) {
+    for (int i = 0; i < n; i++) System.out.print(" ");
+}
 }
